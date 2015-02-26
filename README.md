@@ -1,7 +1,7 @@
-scala-min
-=========
+Create Maps
+===========
 
-A minimal project template to start programming with Scala.
+Create Freemind maps 
 
 ### Contents
 
@@ -13,6 +13,8 @@ scala-min project includes:
   - `sbt-pack` also generates installation scripts of you programs.
 
 ### Usage
+
+./sbt "~test-only *CreateMapsTest"
 
 Download [tar.gz archive](https://github.com/xerial/scala-min/archive/master.tar.gz) or [.zip](https://github.com/xerial/scala-min/archive/master.zip) of this project, then extract the contents.
 

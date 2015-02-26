@@ -3,13 +3,14 @@ package org.freemind.tools
 import java.io.File
 import scala.util.Random
 import scala.xml.XML
+import scala.collection.immutable.TreeMap
 import org.json4s._
 import org.json4s.native.JsonMethods._
 
 /**
  * Created by sanjeev on 2/25/15.
  */
-object ChromeBookmarksToMindMap {
+object ChromeBookmarksToMindMapChron {
 
   implicit val formats = DefaultFormats
 
@@ -73,6 +74,19 @@ object ChromeBookmarksToMindMap {
     return node
   }
 
+  def getSortedTreeMap(n: Node, m: TreeMap[Long, Node]): TreeMap[Long, Node] = {
+    var tree = TreeMap.empty[Long, Node]
+    if (n == null) return tree
+    tree += (n.`date_added`.getOrElse("0").toLong -> n)
+    if (!n.children.isEmpty) {
+      for (c <- n.children) {
+        tree = tree ++ getSortedTreeMap(c, m)
+      }
+    }
+    tree = tree ++ m
+    tree
+  }
+
   def createMindMaps(inputFile: String, outputFile: String) = {
 
     val level = 1
@@ -80,19 +94,23 @@ object ChromeBookmarksToMindMap {
     val lines = scala.io.Source.fromFile(inputFile).mkString
     // parse the json
     val json = parse(lines)
-    //println(s"JSON file: ${json}")
     // iterate over the json to generate the xml
     val root = json.extract[Root]
     //println(s"Bookmark: ${root}")
-    var xml = <map version="1.0.1">
-      {recursiveList(root.roots.bookmark_bar, level, 0)}
-    </map>
-    XML.save(outputFile, xml, "UTF-8", false, null)
+    // Obtain a sorted TreeMap
+    val sortedEle: TreeMap[Long, Node] = getSortedTreeMap(root.roots.bookmark_bar, TreeMap.empty[Long, Node])
+    // Create the MindMap
+    sortedEle.keys.foreach{case k => println(s"${k}: ${sortedEle.get(k).get.name}")}
+//    var xml = <map version="1.0.1">
+//      {recursiveList(root.roots.bookmark_bar, level, 0)}
+//    </map>
+//    // Save the MindMap
+//    XML.save(outputFile, xml, "UTF-8", false, null)
   }
 
   def main(args: Array[String]) {
 
-    createMindMaps("/Users/sanjeev/Library/Application Support/Google/Chrome/Profile 1/Bookmarks", "/Users/sanjeev/Dropbox/MindMaps/Projects/Bookmarks-BV.mm")
+    createMindMaps("/Users/sanjeev/Library/Application Support/Google/Chrome/Profile 1/Bookmarks", "/Users/sanjeev/Dropbox/MindMaps/Projects/Bookmarks-BV-Chron.mm")
 
   }
 }
