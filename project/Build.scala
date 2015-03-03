@@ -22,6 +22,7 @@ object Build extends sbt.Build {
           "org.scala-lang.modules"  %% "scala-xml"      % "1.0.3",
           "org.xerial"               % "xerial-core"    % "3.2.2",
           "org.json4s"              %% "json4s-native"  % "3.2.11",
+          "joda-time"                % "joda-time"      % "2.7",
           "org.scalatest"           %% "scalatest"      % "2.2.0"   % "test"
         )
       )

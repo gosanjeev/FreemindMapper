@@ -77,3 +77,6 @@ Rename the project name defined in `project/Build.scala` as you like.
 
 - [Command line parser](https://github.com/xerial/sbt-pack/tree/develop/src/sbt-test/sbt-pack/command-launcher)
 
+### Resource
+
+http://linuxsleuthing.blogspot.com/2011/06/decoding-google-chrome-timestamps-in.html
